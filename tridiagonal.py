@@ -1,33 +1,15 @@
 import numpy as np
 import pandas as pd
 
-A = np.array([
-    [1, 4, 0, 0, 0],
-    [1, 2, 3, 0, 0],
-    [0, 1, 2, 3, 0],
-    [0, 0, 1, 2, 3],
-    [0, 0, 0, 5, 2]
-])
-B = np.array([1, 2, 3, 4, 5])
-# A = np.array([
-#     [2,-1,0,0],
-#     [4,2,1,0],
-#     [0,4,5,2],
-#     [0,0,3,-1]
-# ])
-#
-# B = [2,8,10,1]
+def tridiag(b,c,d,e):
+
+    M_DIMENSION = b.shape[0]
 
 
-
-def tridiag(A, B):
-    assert A.shape[0] == A.shape[1]
-    M_DIMENSION = A.shape[0]
-
-    b = pd.Series(B, index=pd.RangeIndex(1, M_DIMENSION + 1))
-    c = pd.Series(np.diagonal(A, offset=-1), index=pd.RangeIndex(2, M_DIMENSION + 1))
-    d = pd.Series(np.diagonal(A), index=pd.RangeIndex(1, M_DIMENSION + 1))
-    e = pd.Series(np.diagonal(A, offset=1), index=pd.RangeIndex(1, M_DIMENSION))
+    b = pd.Series(b, index=pd.RangeIndex(1, M_DIMENSION + 1))
+    c = pd.Series(c, index=pd.RangeIndex(2, M_DIMENSION + 1))
+    d = pd.Series(d, index=pd.RangeIndex(1, M_DIMENSION + 1))
+    e = pd.Series(e, index=pd.RangeIndex(1, M_DIMENSION))
 
     alphas, betas = pd.Series(-e[1] / d[1], index=[2]), pd.Series(b[1] / d[1], index=[2])
 
@@ -47,10 +29,3 @@ def tridiag(A, B):
         x[i] = alphas[i + 1] * x[i + 1] + betas[i + 1]
 
     return x.values
-
-res = tridiag(A,B)
-
-print("Вектор Х = ", res)
-print(all(np.isclose(A.dot(res), B)))
-
-
